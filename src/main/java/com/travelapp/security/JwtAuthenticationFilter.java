@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.travelapp.service.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.travelapp.service.CustomUserDetailService;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	@Autowired
 	private JwtTokenProvider tokenProvider;
 	@Autowired
-	private CustomUserDetailService customUserDetailService;
+	private CustomUserDetailsService customUserDetailService;
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
 	@Override

@@ -34,13 +34,12 @@ public class Booking implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("bookings")
-    private Customer customer;
+    private User user;
 
     @ManyToOne
     @JsonIgnoreProperties("bookings")
     private Tour tour;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -87,17 +86,17 @@ public class Booking implements Serializable {
         this.tickets = tickets;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public Booking customer(Customer customer) {
-        this.customer = customer;
+    public Booking user(User customer) {
+        this.user = customer;
         return this;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User customer) {
+        this.user = customer;
     }
 
     public Tour getTour() {

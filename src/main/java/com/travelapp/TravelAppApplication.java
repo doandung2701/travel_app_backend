@@ -8,10 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PollAppApplication {
+public class TravelAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PollAppApplication.class, args);
+		SpringApplication.run(TravelAppApplication.class, args);
 	}
 	@PostConstruct
 	void init() {

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travelapp.exception.ResourceNotFoundException;
 import com.travelapp.model.User;
-import com.travelapp.payload.PagedResponse;
-import com.travelapp.payload.PollResponse;
 import com.travelapp.payload.UserIdentityAvailability;
 import com.travelapp.payload.UserProfile;
 import com.travelapp.payload.UserSummary;
@@ -21,8 +19,6 @@ import com.travelapp.repository.UserRepository;
 
 import com.travelapp.security.CurrentUser;
 import com.travelapp.security.UserPrincipal;
-
-import com.travelapp.util.AppConstants;
 
 @RestController
 @RequestMapping("/api")

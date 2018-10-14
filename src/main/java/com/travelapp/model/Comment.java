@@ -30,7 +30,7 @@ public class Comment implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("comments")
-    private Customer customer;
+    private User user;
 
     @ManyToOne
     @JsonIgnoreProperties("comments")
@@ -58,17 +58,17 @@ public class Comment implements Serializable {
         this.commentDetail = commentDetail;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public Comment customer(Customer customer) {
-        this.customer = customer;
+    public Comment user(User customer) {
+        this.user = customer;
         return this;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User customer) {
+        this.user = customer;
     }
 
     public Tour getTour() {

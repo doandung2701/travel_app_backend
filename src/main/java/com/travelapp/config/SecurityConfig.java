@@ -1,5 +1,6 @@
 package com.travelapp.config;
 
+import com.travelapp.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,14 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.travelapp.security.JwtAuthenticationEntryPoint;
 import com.travelapp.security.JwtAuthenticationFilter;
-import com.travelapp.service.CustomUserDetailService;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled=true,jsr250Enabled=true,prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
-	CustomUserDetailService customUserDetailService;
+	CustomUserDetailsService customUserDetailService;
 	@Autowired
 	private JwtAuthenticationEntryPoint uAuthenticationEntryPoint;
 	@Bean
@@ -70,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     "/**/*.js").permitAll()
 			.antMatchers("/api/auth/**")
 				.permitAll()
+			.antMatchers("/api/vehicle-types").permitAll()
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
             .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
