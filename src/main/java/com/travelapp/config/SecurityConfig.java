@@ -70,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     "/**/*.js").permitAll()
 			.antMatchers("/api/auth/**")
 				.permitAll()
+			.antMatchers("/api/**").permitAll()
 			.antMatchers("/api/vehicle-types").permitAll()
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
