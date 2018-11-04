@@ -29,24 +29,25 @@ public class Category implements Serializable {
         this.name = name;
     }
     @OneToMany(mappedBy = "category")
-    private Set<Booking> bookings=new HashSet<Booking>();
+    private Set<Tour> tours=new HashSet<Tour>();
 
-    public Set<Booking> getBookings() {
-        return bookings;
+    public Set<Tour> getTours() {
+        return tours;
     }
 
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
+    public void setTours(Set<Tour> tours) {
+        this.tours = tours;
     }
-    public Category addBooking(Booking booking) {
-        this.bookings.add(booking);
-        booking.setCategory(this);
+
+    public Category addTour(Tour tour) {
+        this.tours.add(tour);
+        tour.setCategory(this);
         return this;
     }
 
-    public Category removeBooking(Booking booking) {
-        this.bookings.remove(booking);
-        booking.setCategory(null);
+    public Category removeTour(Tour tour) {
+        this.tours.remove(tour);
+        tour.setCategory(null);
         return this;
     }
 }

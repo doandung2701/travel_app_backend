@@ -46,6 +46,21 @@ public class Tour implements Serializable {
     @NotNull
     @Column(name = "status", nullable = false)
     private Boolean status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("tours")
+    private Category category;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     @OneToMany(mappedBy = "tour")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -60,7 +75,7 @@ public class Tour implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "rate_tours_id", referencedColumnName = "id"))
     private Set<RateTour> rateTours = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "tour_location",
                joinColumns = @JoinColumn(name = "tours_id", referencedColumnName = "id"),

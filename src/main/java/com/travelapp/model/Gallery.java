@@ -28,8 +28,6 @@ public class Gallery implements Serializable {
     @Column(name = "picture", nullable = false)
     private byte[] picture;
 
-    @Column(name = "picture_content_type", nullable = false)
-    private String pictureContentType;
 
     @ManyToOne
     @JsonIgnoreProperties("galleries")
@@ -57,18 +55,9 @@ public class Gallery implements Serializable {
         this.picture = picture;
     }
 
-    public String getPictureContentType() {
-        return pictureContentType;
-    }
 
-    public Gallery pictureContentType(String pictureContentType) {
-        this.pictureContentType = pictureContentType;
-        return this;
-    }
 
-    public void setPictureContentType(String pictureContentType) {
-        this.pictureContentType = pictureContentType;
-    }
+
 
     public Location getLocation() {
         return location;
@@ -109,7 +98,7 @@ public class Gallery implements Serializable {
         return "Gallery{" +
             "id=" + getId() +
             ", picture='" + getPicture() + "'" +
-            ", pictureContentType='" + getPictureContentType() + "'" +
+
             "}";
     }
 }

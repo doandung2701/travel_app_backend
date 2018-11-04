@@ -26,9 +26,8 @@ public class RateTour implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "rate")
-    private RATE rate;
+    private String rate;
 
     @ManyToMany(mappedBy = "rateTours")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -44,16 +43,16 @@ public class RateTour implements Serializable {
         this.id = id;
     }
 
-    public RATE getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public RateTour rate(RATE rate) {
+    public RateTour rate(String rate) {
         this.rate = rate;
         return this;
     }
 
-    public void setRate(RATE rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 

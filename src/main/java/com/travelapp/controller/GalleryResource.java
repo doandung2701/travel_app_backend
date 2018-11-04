@@ -4,14 +4,18 @@ import com.travelapp.controller.util.HeaderUtil;
 import com.travelapp.exception.BadRequestException;
 import com.travelapp.exception.ResourceNotFoundException;
 import com.travelapp.model.Gallery;
+import com.travelapp.model.Location;
 import com.travelapp.service.GalleryService;
+import com.travelapp.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -30,21 +34,23 @@ public class GalleryResource {
     private static final String ENTITY_NAME = "gallery";
 
     private final GalleryService galleryService;
+    private  final LocationService locationService;
     @Autowired
-    public GalleryResource(GalleryService galleryService) {
+    public GalleryResource(GalleryService galleryService, LocationService locationService) {
         this.galleryService = galleryService;
+        this.locationService=locationService;
     }
 
     @PostMapping("/galleries")
-    public ResponseEntity<Gallery> createGallery(@Valid @RequestBody Gallery galleryDTO) throws URISyntaxException {
-        log.debug("REST request to save Gallery : {}", galleryDTO);
-        if (galleryDTO.getId() != null) {
-            throw new BadRequestException("A new gallery cannot already have an ID");
-        }
+    public ResponseEntity<Gallery> createGallery(MultipartFile picture,Long locationId) throws URISyntaxException, IOException {
+       Gallery galleryDTO=new Gallery();
+       Location location=locationService.findOne(locationId).get();
+       galleryDTO.setLocation(location);
+       galleryDTO.setPicture(picture.getBytes());
         Gallery result = galleryService.save(galleryDTO);
         return ResponseEntity.created(new URI("/api/galleries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .body(null);
     }
 
     @PutMapping("/galleries")

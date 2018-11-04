@@ -35,9 +35,7 @@ public class Booking implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("bookings")
     private User user;
-    @ManyToOne
-    @JsonIgnoreProperties("bookings")
-    private Category category;
+
     @ManyToOne
     @JsonIgnoreProperties("bookings")
     private Tour tour;
@@ -142,11 +140,5 @@ public class Booking implements Serializable {
             ", note='" + getNote() + "'" +
             "}";
     }
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }
