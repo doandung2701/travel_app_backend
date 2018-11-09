@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.travelapp.model.enumeration.GENDER;
@@ -52,13 +51,18 @@ public class User extends DateAudit {
 	@OneToMany(mappedBy = "user")
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<Comment> comments = new HashSet<>();
+
+
+	@OneToMany(mappedBy = "user")
+	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	private Set<Rate> rates = new HashSet<>();
+
 	@OneToMany(mappedBy = "user")
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<Booking> bookings = new HashSet<>();
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-
 	public Long getId() {
 		return id;
 	}

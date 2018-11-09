@@ -17,14 +17,14 @@ import java.util.Optional;
 @Repository
 public interface TourRepository extends JpaRepository<Tour, Long> {
 
-    @Query(value = "select distinct tour from Tour tour left join fetch tour.rateTours left join fetch tour.locations",
+    @Query(value = "select distinct tour from Tour tour left join fetch tour.rates left join fetch tour.locations left join  fetch tour.comments",
         countQuery = "select count(distinct tour) from Tour tour")
     Page<Tour> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(value = "select distinct tour from Tour tour left join fetch tour.rateTours left join fetch tour.locations")
+    @Query(value = "select distinct tour from Tour tour left join fetch tour.rates left join fetch tour.locations left join  fetch tour.comments" )
     List<Tour> findAllWithEagerRelationships();
 
-    @Query("select tour from Tour tour left join fetch tour.rateTours left join fetch tour.locations where tour.id =:id")
+    @Query("select tour from Tour tour left join fetch tour.rates left join fetch tour.locations left join  fetch tour.comments where tour.id =:id")
     Optional<Tour> findOneWithEagerRelationships(@Param("id") Long id);
-
+    List<Tour> findAllByCategoryId(long categoryId);
 }

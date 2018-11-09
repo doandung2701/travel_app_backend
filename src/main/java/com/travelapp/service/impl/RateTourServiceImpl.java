@@ -1,7 +1,7 @@
 package com.travelapp.service.impl;
 
-import com.travelapp.model.RateTour;
-import com.travelapp.repository.RateTourRepository;
+import com.travelapp.model.RateType;
+import com.travelapp.repository.RateTypeRepository;
 import com.travelapp.service.RateTourService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing RateTour.
+ * Service Implementation for managing RateType.
  */
 @Service
 @Transactional
@@ -24,25 +24,25 @@ public class RateTourServiceImpl implements RateTourService {
 
     private final Logger log = LoggerFactory.getLogger(RateTourServiceImpl.class);
 
-    private final RateTourRepository rateTourRepository;
+    private final RateTypeRepository rateTypeRepository;
 
     @Autowired
-    public RateTourServiceImpl(RateTourRepository rateTourRepository ) {
-        this.rateTourRepository = rateTourRepository;
+    public RateTourServiceImpl(RateTypeRepository rateTypeRepository) {
+        this.rateTypeRepository = rateTypeRepository;
     }
 
     /**
      * Save a rateTour.
      *
-     * @param rateTourDTO the entity to save
+     * @param rateTypeDTO the entity to save
      * @return the persisted entity
      */
     @Override
-    public RateTour save(RateTour rateTourDTO) {
-        log.debug("Request to save RateTour : {}", rateTourDTO);
+    public RateType save(RateType rateTypeDTO) {
+        log.debug("Request to save RateType : {}", rateTypeDTO);
 
-        rateTourDTO = rateTourRepository.save(rateTourDTO);
-        return rateTourDTO;
+        rateTypeDTO = rateTypeRepository.save(rateTypeDTO);
+        return rateTypeDTO;
     }
 
     /**
@@ -52,9 +52,9 @@ public class RateTourServiceImpl implements RateTourService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<RateTour> findAll() {
+    public List<RateType> findAll() {
         log.debug("Request to get all RateTours");
-        return rateTourRepository.findAll().stream()
+        return rateTypeRepository.findAll().stream()
 
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -68,9 +68,9 @@ public class RateTourServiceImpl implements RateTourService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<RateTour> findOne(Long id) {
-        log.debug("Request to get RateTour : {}", id);
-        return rateTourRepository.findById(id)
+    public Optional<RateType> findOne(Long id) {
+        log.debug("Request to get RateType : {}", id);
+        return rateTypeRepository.findById(id)
             ;
     }
 
@@ -81,7 +81,7 @@ public class RateTourServiceImpl implements RateTourService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete RateTour : {}", id);
-        rateTourRepository.deleteById(id);
+        log.debug("Request to delete RateType : {}", id);
+        rateTypeRepository.deleteById(id);
     }
 }

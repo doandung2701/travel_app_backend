@@ -2,18 +2,23 @@ package com.travelapp.controller;
 import com.travelapp.controller.util.HeaderUtil;
 import com.travelapp.exception.BadRequestException;
 import com.travelapp.exception.ResourceNotFoundException;
-import com.travelapp.model.Comment;
-import com.travelapp.service.CommentService;
+import com.travelapp.model.*;
+import com.travelapp.payload.CommentPayload;
+import com.travelapp.repository.RateTypeRepository;
+import com.travelapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.URIException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +34,14 @@ public class CommentResource {
     private static final String ENTITY_NAME = "comment";
 
     private final CommentService commentService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private  TourService tourService;
+    @Autowired
+    private RateService rateService;
+    @Autowired
+    private RateTypeRepository rateTypeRepository;
     @Autowired
     public CommentResource(CommentService commentService) {
         this.commentService = commentService;
@@ -99,4 +112,29 @@ public class CommentResource {
         commentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+    @Transactional
+    @PostMapping("/comment/tour")
+    public ResponseEntity<?> createCommentOfUser(@RequestBody CommentPayload commentPayload) throws URISyntaxException {
+        log.debug(commentPayload.toString());
+        User user=customerService.findOne(commentPayload.getUserId()).get();
+        Tour tour=tourService.findOne(commentPayload.getTourId()).get();
+        Comment comment=new Comment();
+        comment.setTour(tour);
+        comment.setUser(user);
+        comment.setCommentDetail(commentPayload.getCommentDetail());
+        Comment result = commentService.save(comment);
+        Rate rate=new Rate();
+        RateType rateType=rateTypeRepository.getOne(commentPayload.getRateTypeId());
+        rate.setRateType(rateType);
+        rate.setTour(tour);
+        rate.setUser(user);
+        Rate newRate=rateService.save(rate);
+        List re=new ArrayList();
+        re.add(result);
+        re.add(newRate);
+        return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(re);
+    }
+
 }

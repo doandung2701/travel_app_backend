@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,13 +66,15 @@ public class TourResource {
     }
 
 
-    @GetMapping("/tours")
-
+    @GetMapping(value = "/tours")
     public ResponseEntity<List<Tour>> getAllTours(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Tours");
         Page<Tour> page;
         if (eagerload) {
+
             page = tourService.findAllWithEagerRelationships(pageable);
+
+
         } else {
             page = tourService.findAll(pageable);
         }
@@ -94,5 +97,10 @@ public class TourResource {
         log.debug("REST request to delete Tour : {}", id);
         tourService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    @GetMapping("/tours/category/{categoryId}")
+    public ResponseEntity<List<Tour>> getTourByCategory(@PathVariable long categoryId){
+        log.debug("REST request to get Tour by cageoryId : {}", categoryId);
+        return new ResponseEntity<>(tourService.getTourByCategoryId(categoryId),null,HttpStatus.OK);
     }
 }

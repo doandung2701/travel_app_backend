@@ -1,24 +1,24 @@
 package com.travelapp.service;
 
 
-import com.travelapp.model.RateTour;
+import com.travelapp.model.RateType;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing RateTour.
+ * Service Interface for managing RateType.
  */
 public interface RateTourService {
 
-    RateTour save(RateTour rateTourDTO);
+    RateType save(RateType rateTypeDTO);
 
     /**
      * Get all the rateTours.
      *
      * @return the list of entities
      */
-    List<RateTour> findAll();
+    List<RateType> findAll();
 
 
     /**
@@ -27,7 +27,7 @@ public interface RateTourService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<RateTour> findOne(Long id);
+    Optional<RateType> findOne(Long id);
 
     /**
      * Delete the "id" rateTour.

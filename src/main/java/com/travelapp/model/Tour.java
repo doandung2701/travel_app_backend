@@ -1,5 +1,4 @@
 package com.travelapp.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -62,31 +61,29 @@ public class Tour implements Serializable {
         this.category = category;
     }
 
-    @OneToMany(mappedBy = "tour")
+    @OneToMany(mappedBy = "tour",fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Comment> comments = new HashSet<>();
-    @OneToMany(mappedBy = "tour")
+    @OneToMany(mappedBy = "tour",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Booking> bookings = new HashSet<>();
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "tour_rate_tour",
-               joinColumns = @JoinColumn(name = "tours_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "rate_tours_id", referencedColumnName = "id"))
-    private Set<RateTour> rateTours = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tour")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Rate> rates = new HashSet<>();
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "tour_location",
                joinColumns = @JoinColumn(name = "tours_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "locations_id", referencedColumnName = "id"))
     private Set<Location> locations = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("tours")
     private Vehicle vehicle;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -205,34 +202,18 @@ public class Tour implements Serializable {
         booking.setTour(null);
         return this;
     }
-
+    public Tour addRate(Rate rate){
+        rate.setTour(this);
+        this.rates.add(rate);
+        return this;
+    }
+    public Tour removeRate(Rate rate){
+        this.rates.remove(rate);
+        rate.setTour(null);
+        return this;
+    }
     public void setBookings(Set<Booking> bookings) {
         this.bookings = bookings;
-    }
-
-    public Set<RateTour> getRateTours() {
-        return rateTours;
-    }
-
-    public Tour rateTours(Set<RateTour> rateTours) {
-        this.rateTours = rateTours;
-        return this;
-    }
-
-    public Tour addRateTour(RateTour rateTour) {
-        this.rateTours.add(rateTour);
-        rateTour.getTours().add(this);
-        return this;
-    }
-
-    public Tour removeRateTour(RateTour rateTour) {
-        this.rateTours.remove(rateTour);
-        rateTour.getTours().remove(this);
-        return this;
-    }
-
-    public void setRateTours(Set<RateTour> rateTours) {
-        this.rateTours = rateTours;
     }
 
     public Set<Location> getLocations() {
@@ -304,5 +285,14 @@ public class Tour implements Serializable {
             ", freeSpace=" + getFreeSpace() +
             ", status='" + isStatus() + "'" +
             "}";
+    }
+
+    public Set<Rate> getRates() {
+
+        return rates;
+    }
+
+    public void setRates(Set<Rate> rates) {
+        this.rates = rates;
     }
 }

@@ -1,5 +1,7 @@
 package com.travelapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -28,7 +30,8 @@ public class Category implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Tour> tours=new HashSet<Tour>();
 
     public Set<Tour> getTours() {

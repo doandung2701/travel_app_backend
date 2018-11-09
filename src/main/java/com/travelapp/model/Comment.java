@@ -27,16 +27,15 @@ public class Comment implements Serializable {
     @Column(name = "comment_detail", nullable = false)
     private String commentDetail;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @NotNull
-    @JsonIgnoreProperties("comments")
+    @JsonIgnoreProperties({"comments","hibernateLazyInitializer", "handler"})
     private User user;
 
-    @ManyToOne
-    @JsonIgnoreProperties("comments")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"comments","hibernateLazyInitializer", "handler"})
     private Tour tour;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }

@@ -1,6 +1,5 @@
 package com.travelapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.travelapp.model.enumeration.RATE;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -13,12 +12,12 @@ import java.util.Objects;
 
 
 /**
- * A RateTour.
+ * A RateType.
  */
 @Entity
-@Table(name = "rate_tour")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class RateTour implements Serializable {
+@Table(name = "rate_type")
+public class RateType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +27,26 @@ public class RateTour implements Serializable {
 
     @Column(name = "rate")
     private String rate;
+    @OneToMany(mappedBy = "rateType")
+    private Set<Rate> rates=new HashSet<>();
+    public RateType addRate(Rate rate){
+        this.rates.add(rate);
+        rate.setRateType(this);
+        return this;
+    }
+    public RateType removeRate(Rate rate){
+        this.rates.remove(rate);
+        rate.setRateType(null);
+        return this;
+    }
 
-    @ManyToMany(mappedBy = "rateTours")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<Tour> tours = new HashSet<>();
+    public Set<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(Set<Rate> rates) {
+        this.rates = rates;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -47,7 +61,7 @@ public class RateTour implements Serializable {
         return rate;
     }
 
-    public RateTour rate(String rate) {
+    public RateType rate(String rate) {
         this.rate = rate;
         return this;
     }
@@ -55,32 +69,6 @@ public class RateTour implements Serializable {
     public void setRate(String rate) {
         this.rate = rate;
     }
-
-    public Set<Tour> getTours() {
-        return tours;
-    }
-
-    public RateTour tours(Set<Tour> tours) {
-        this.tours = tours;
-        return this;
-    }
-
-    public RateTour addTour(Tour tour) {
-        this.tours.add(tour);
-        tour.getRateTours().add(this);
-        return this;
-    }
-
-    public RateTour removeTour(Tour tour) {
-        this.tours.remove(tour);
-        tour.getRateTours().remove(this);
-        return this;
-    }
-
-    public void setTours(Set<Tour> tours) {
-        this.tours = tours;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -90,11 +78,11 @@ public class RateTour implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RateTour rateTour = (RateTour) o;
-        if (rateTour.getId() == null || getId() == null) {
+        RateType rateType = (RateType) o;
+        if (rateType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), rateTour.getId());
+        return Objects.equals(getId(), rateType.getId());
     }
 
     @Override
@@ -104,7 +92,7 @@ public class RateTour implements Serializable {
 
     @Override
     public String toString() {
-        return "RateTour{" +
+        return "RateType{" +
             "id=" + getId() +
             ", rate='" + getRate() + "'" +
             "}";
