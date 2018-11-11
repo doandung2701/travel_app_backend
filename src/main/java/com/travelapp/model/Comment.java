@@ -29,11 +29,11 @@ public class Comment implements Serializable {
 
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @NotNull
-    @JsonIgnoreProperties({"comments","hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"comments","bookings","hibernateLazyInitializer", "handler"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"comments","hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({"comments","bookings","hibernateLazyInitializer", "handler"})
     private Tour tour;
 
     public Long getId() {

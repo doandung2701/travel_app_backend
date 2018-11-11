@@ -22,22 +22,61 @@ public class Booking implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "note")
-    private String note;
+    @Column(name = "total")
+    private int totalPeople;
+    @Column(name = "status")
+    private boolean status;
+    private String securityCode;
+    private String expirationDate;
+    private String cardNumber;
+    private String cardName;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "booking_ticket",
-               joinColumns = @JoinColumn(name = "bookings_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "tickets_id", referencedColumnName = "id"))
-    private Set<Ticket> tickets = new HashSet<>();
+    public String getSecurityCode() {
+        return securityCode;
+    }
+
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
+    }
+
+    public String getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     @ManyToOne
-    @JsonIgnoreProperties("bookings")
+    @JsonIgnoreProperties({"bookings","hibernateLazyInitializer", "handler"})
     private User user;
 
     @ManyToOne
-    @JsonIgnoreProperties("bookings")
+    @JsonIgnoreProperties({"bookings","hibernateLazyInitializer", "handler"})
     private Tour tour;
 
     public Long getId() {
@@ -48,97 +87,27 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    public String getNote() {
-        return note;
+    public int getTotalPeople() {
+        return totalPeople;
     }
 
-    public Booking note(String note) {
-        this.note = note;
-        return this;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Set<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public Booking tickets(Set<Ticket> tickets) {
-        this.tickets = tickets;
-        return this;
-    }
-
-    public Booking addTicket(Ticket ticket) {
-        this.tickets.add(ticket);
-        ticket.getBookings().add(this);
-        return this;
-    }
-
-    public Booking removeTicket(Ticket ticket) {
-        this.tickets.remove(ticket);
-        ticket.getBookings().remove(this);
-        return this;
-    }
-
-    public void setTickets(Set<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setTotalPeople(int totalPeople) {
+        this.totalPeople = totalPeople;
     }
 
     public User getUser() {
         return user;
     }
 
-    public Booking user(User customer) {
-        this.user = customer;
-        return this;
-    }
-
-    public void setUser(User customer) {
-        this.user = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Tour getTour() {
         return tour;
     }
 
-    public Booking tour(Tour tour) {
-        this.tour = tour;
-        return this;
-    }
-
     public void setTour(Tour tour) {
         this.tour = tour;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Booking booking = (Booking) o;
-        if (booking.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), booking.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "Booking{" +
-            "id=" + getId() +
-            ", note='" + getNote() + "'" +
-            "}";
-    }
-
 }

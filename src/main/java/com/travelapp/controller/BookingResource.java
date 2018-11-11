@@ -4,13 +4,17 @@ import com.travelapp.controller.util.HeaderUtil;
 import com.travelapp.exception.BadRequestException;
 import com.travelapp.exception.ResourceNotFoundException;
 import com.travelapp.model.Booking;
+import com.travelapp.payload.BookingPayload;
 import com.travelapp.service.BookingService;
+import com.travelapp.service.CustomerService;
+import com.travelapp.service.TourService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -29,6 +33,10 @@ public class BookingResource {
     private static final String ENTITY_NAME = "booking";
 
     private final BookingService bookingService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private TourService tourService;
     @Autowired
     public BookingResource(BookingService bookingService) {
         this.bookingService = bookingService;
@@ -92,5 +100,23 @@ public class BookingResource {
         log.debug("REST request to delete Booking : {}", id);
         bookingService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    @PostMapping("/bookings/payment")
+    public ResponseEntity<Booking> createBookingAndpayment(@RequestBody BookingPayload bookingDTO) throws URISyntaxException {
+        log.debug("REST request to save Booking : {}", bookingDTO);
+        Booking booking =new Booking();
+        booking.setStatus(false);
+        booking.setTotalPeople(bookingDTO.getTotalPeople());
+        booking.setCardName(bookingDTO.getCardNumber());
+        booking.setCardNumber(bookingDTO.getCardNumber());
+        booking.setExpirationDate(bookingDTO.getExpirationDate());
+        booking.setSecurityCode(bookingDTO.getSecurityCode());
+        booking.setUser(customerService.findOne(bookingDTO.getUserId()).get());
+        booking.setTour(tourService.findOne(bookingDTO.getTourId()).get());
+        Booking result = bookingService.save(booking);
+
+        return ResponseEntity.created(new URI("/api/bookings/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 }

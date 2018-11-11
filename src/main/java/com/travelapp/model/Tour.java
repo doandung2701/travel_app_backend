@@ -1,4 +1,5 @@
 package com.travelapp.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,6 +9,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -25,6 +27,28 @@ public class Tour implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    private Date fromDate;
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    private Date toDate;
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
 
     @NotNull
     @Column(name = "name", nullable = false)
@@ -67,7 +91,6 @@ public class Tour implements Serializable {
     @OneToMany(mappedBy = "tour",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Booking> bookings = new HashSet<>();
-
     @OneToMany(mappedBy = "tour")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Rate> rates = new HashSet<>();

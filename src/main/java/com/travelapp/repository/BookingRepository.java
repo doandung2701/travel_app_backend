@@ -13,14 +13,14 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query(value = "select distinct booking from Booking booking left join fetch booking.tickets",
+    @Query(value = "select distinct booking from Booking booking",
         countQuery = "select count(distinct booking) from Booking booking")
     Page<Booking> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(value = "select distinct booking from Booking booking left join fetch booking.tickets")
+    @Query(value = "select distinct booking from Booking booking ")
     List<Booking> findAllWithEagerRelationships();
 
-    @Query("select booking from Booking booking left join fetch booking.tickets where booking.id =:id")
+    @Query("select booking from Booking booking where booking.id =:id")
     Optional<Booking> findOneWithEagerRelationships(@Param("id") Long id);
 
 }
