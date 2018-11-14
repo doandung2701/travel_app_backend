@@ -85,16 +85,15 @@ public class Tour implements Serializable {
         this.category = category;
     }
 
-    @OneToMany(mappedBy = "tour",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tour",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Comment> comments = new HashSet<>();
     @OneToMany(mappedBy = "tour",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Booking> bookings = new HashSet<>();
-    @OneToMany(mappedBy = "tour")
+    @OneToMany(mappedBy = "tour",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Rate> rates = new HashSet<>();
-
 
     @ManyToMany(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -103,7 +102,7 @@ public class Tour implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "locations_id", referencedColumnName = "id"))
     private Set<Location> locations = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("tours")
     private Vehicle vehicle;
 
@@ -298,17 +297,7 @@ public class Tour implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Tour{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", price=" + getPrice() +
-            ", maximumPeople=" + getMaximumPeople() +
-            ", freeSpace=" + getFreeSpace() +
-            ", status='" + isStatus() + "'" +
-            "}";
-    }
+
 
     public Set<Rate> getRates() {
 

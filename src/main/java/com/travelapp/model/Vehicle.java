@@ -150,13 +150,5 @@ public class Vehicle implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Vehicle{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", status='" + isStatus() + "'" +
-            ", container=" + getContainer() +
-            "}";
-    }
+
 }

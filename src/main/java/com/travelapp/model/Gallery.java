@@ -93,12 +93,4 @@ public class Gallery implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Gallery{" +
-            "id=" + getId() +
-            ", picture='" + getPicture() + "'" +
-
-            "}";
-    }
 }

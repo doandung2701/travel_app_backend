@@ -33,10 +33,7 @@ public class Provider implements Serializable {
     @OneToMany(mappedBy = "provider")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Location> locations = new HashSet<>();
-    @OneToMany(mappedBy = "provider")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Hotel> hotels = new HashSet<>();
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -83,31 +80,9 @@ public class Provider implements Serializable {
         this.locations = locations;
     }
 
-    public Set<Hotel> getHotels() {
-        return hotels;
-    }
 
-    public Provider hotels(Set<Hotel> hotels) {
-        this.hotels = hotels;
-        return this;
-    }
 
-    public Provider addHotel(Hotel hotel) {
-        this.hotels.add(hotel);
-        hotel.setProvider(this);
-        return this;
-    }
 
-    public Provider removeHotel(Hotel hotel) {
-        this.hotels.remove(hotel);
-        hotel.setProvider(null);
-        return this;
-    }
-
-    public void setHotels(Set<Hotel> hotels) {
-        this.hotels = hotels;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -129,11 +104,5 @@ public class Provider implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Provider{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            "}";
-    }
+
 }

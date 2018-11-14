@@ -35,8 +35,7 @@ public class Location implements Serializable {
     @Size(min = 2)
     @Column(name = "description", nullable = false)
     private String description;
-
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location",fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Gallery> galleries = new HashSet<>();
     @ManyToOne
@@ -167,12 +166,5 @@ public class Location implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Location{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            "}";
-    }
+
 }

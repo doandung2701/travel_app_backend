@@ -104,11 +104,5 @@ public class Comment implements Serializable {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-            "id=" + getId() +
-            ", commentDetail='" + getCommentDetail() + "'" +
-            "}";
-    }
+
 }
