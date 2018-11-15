@@ -5,8 +5,10 @@ import com.travelapp.exception.BadRequestException;
 import com.travelapp.exception.ResourceNotFoundException;
 import com.travelapp.model.Category;
 import com.travelapp.model.Provider;
+import com.travelapp.payload.CategoryPayload;
 import com.travelapp.service.CategoryService;
 import com.travelapp.service.ProviderService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +28,8 @@ public class CategoryResource {
     private final Logger log = LoggerFactory.getLogger(ProviderResource.class);
 
     private static final String ENTITY_NAME = "category";
+    @Autowired
+    private ModelMapper modelMapper;
 
     private final CategoryService categoryService;
     @Autowired
@@ -60,9 +65,9 @@ public class CategoryResource {
 
 
     @GetMapping("/category")
-    public List<Category> getAllCategory() {
+    public List<CategoryPayload> getAllCategory() {
         log.debug("REST request to get all Category");
-        return categoryService.findAll();
+        return categoryService.findAll().stream().map(category -> convertToDto(category)).collect(Collectors.toList());
     }
 
     @GetMapping("/category/{id}")
@@ -81,5 +86,9 @@ public class CategoryResource {
         log.debug("REST request to delete category : {}", id);
         categoryService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    private CategoryPayload convertToDto(Category post) {
+        CategoryPayload postDto = modelMapper.map(post, CategoryPayload.class);
+        return postDto;
     }
 }

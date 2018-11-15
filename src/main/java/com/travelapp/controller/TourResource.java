@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -117,5 +119,12 @@ public class TourResource {
     private TourDetailRequest converToTourDetail(Tour tour){
         TourDetailRequest tourDetailRequest=modelMapper.map(tour,TourDetailRequest.class);
         return tourDetailRequest;
+    }
+    @GetMapping("/tours/search/{category}")
+        public ResponseEntity<List<HomeTourPayload>> getTourByProviderAndName(@PathVariable String category,@RequestParam(name="name",required = false)String name, @RequestParam(name = "fromDate",required = false) @DateTimeFormat(pattern="yyyy-MM-dd")Date fromdate, @RequestParam(name = "toDate",required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate){
+        if(fromdate==null||toDate==null){
+            return new ResponseEntity<List<HomeTourPayload>>(tourService.findTourByCategoryAndName(category,name).stream().map(tour->convertToDto(tour)).collect(Collectors.toList()), null, HttpStatus.OK);
+        }
+        return  new ResponseEntity<List<HomeTourPayload>>(tourService.findTourByCategoryAndTimeStartAndTimeEnd(category,name,fromdate,toDate).stream().map(tour->convertToDto(tour)).collect(Collectors.toList()), null, HttpStatus.OK);
     }
 }

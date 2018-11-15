@@ -159,5 +159,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.security:spring-security-test:5.0.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.0.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:0.7.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.social:spring-social-facebook:unknown" level="project" />
   </component>
 </module>

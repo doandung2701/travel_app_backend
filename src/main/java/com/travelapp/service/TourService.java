@@ -4,6 +4,7 @@ import com.travelapp.model.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,7 @@ public interface TourService {
      */
     void delete(Long id);
     List<Tour> getTourByCategoryId(long categoryId);
-
+    List<Tour> findTourByName(String name);
+    List<Tour> findTourByCategoryAndTimeStartAndTimeEnd(String category,String name, Date starttime, Date endTime);
+    List<Tour> findTourByCategoryAndName(String category,String name);
 }

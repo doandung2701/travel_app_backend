@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,5 +98,20 @@ public class TourServiceImpl implements TourService {
     @Override
     public List<Tour> getTourByCategoryId(long categoryId) {
         return tourRepository.findAllByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<Tour> findTourByName(String name) {
+        return tourRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    @Override
+    public List<Tour> findTourByCategoryAndTimeStartAndTimeEnd(String category,String name, Date starttime, Date endTime) {
+        return tourRepository.findAllWithSearch(category,name,starttime,endTime);
+    }
+
+    @Override
+    public List<Tour> findTourByCategoryAndName(String category, String name) {
+        return tourRepository.findByNameAndCategory(category,name);
     }
 }

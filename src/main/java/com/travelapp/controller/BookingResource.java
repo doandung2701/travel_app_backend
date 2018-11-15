@@ -4,6 +4,7 @@ import com.travelapp.controller.util.HeaderUtil;
 import com.travelapp.exception.BadRequestException;
 import com.travelapp.exception.ResourceNotFoundException;
 import com.travelapp.model.Booking;
+import com.travelapp.model.Tour;
 import com.travelapp.payload.BookingPayload;
 import com.travelapp.service.BookingService;
 import com.travelapp.service.CustomerService;
@@ -112,9 +113,12 @@ public class BookingResource {
         booking.setExpirationDate(bookingDTO.getExpirationDate());
         booking.setSecurityCode(bookingDTO.getSecurityCode());
         booking.setUser(customerService.findOne(bookingDTO.getUserId()).get());
-        booking.setTour(tourService.findOne(bookingDTO.getTourId()).get());
-        Booking result = bookingService.save(booking);
+        Tour tour=tourService.findOne(bookingDTO.getTourId()).get();
+        tour.setFreeSpace(tour.getFreeSpace()-bookingDTO.getTotalPeople());
 
+        booking.setTour(tour);
+        Booking result = bookingService.save(booking);
+        tourService.save(tour);
         return ResponseEntity.created(new URI("/api/bookings/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);

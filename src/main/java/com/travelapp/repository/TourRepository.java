@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,9 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
     @Query("select tour from Tour tour left join fetch tour.rates left join fetch tour.locations left join  fetch tour.comments where tour.id =:id")
     Optional<Tour> findOneWithEagerRelationships(@Param("id") Long id);
     List<Tour> findAllByCategoryId(long categoryId);
+    List<Tour> findByNameContainingIgnoreCase(String name);
+    @Query("select distinct tour from Tour tour left join fetch tour.rates where tour.category.name like CONCAT('%',:category,'%') and tour.name like CONCAT('%',:name,'%') and tour.fromDate >= :fromDate and tour.toDate <= :todate")
+    List<Tour> findAllWithSearch(@Param("category") String categoryName,@Param("name") String name, @Param("fromDate")Date fromDate,@Param("todate") Date toDate);
+    @Query("select distinct tour from Tour tour left join fetch tour.rates where tour.category.name like CONCAT('%',:category,'%') and tour.name like CONCAT('%',:name,'%')")
+    List<Tour> findByNameAndCategory(@Param("category") String category,@Param("name") String name);
 }
